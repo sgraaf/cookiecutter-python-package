@@ -24,7 +24,7 @@ jobs:
         with:
           repository: "sgraaf/${{ env.DEMO }}"
           path: ${{ env.CURRENT_DEMO }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN_FOR_PUSH }}
+          token: ${{ secrets.X_GITHUB_PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -40,15 +40,12 @@ jobs:
           cat "${{ env.TEMPLATE }}/.github/workflows/input-for-demo.txt" | cookiecutter "${{ env.TEMPLATE }}"
           find "${{ env.DEMO }}"
 
-      - name: Configure Git
-        run: |
-          git config user.name "Automated"
-          git config user.email "actions@users.noreply.github.com"
-
       - name: Commit and push changes
         run: |
           mv "${{ env.CURRENT_DEMO }}/.git" "${{ env.DEMO }}"
           cd "${{ env.DEMO }}"
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
           git add -A
           git commit -m "Demo of ${{ env.TEMPLATE }}@${GITHUB_SHA}" || exit 0
           git push

@@ -8,6 +8,8 @@
 
 A [cookiecutter](https://cookiecutter.readthedocs.io/) template for creating a new Python package.
 
+See https://github.com/sgraaf/cookiecutter-python-package-demo for a demo of this template.
+
 ## Usage
 
 ```shell
