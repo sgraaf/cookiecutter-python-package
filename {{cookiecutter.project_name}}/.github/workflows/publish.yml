@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python -m flit install --symlink
+          python -m flit install --deps production --symlink
 
       - name: Publish to PyPI
         env:

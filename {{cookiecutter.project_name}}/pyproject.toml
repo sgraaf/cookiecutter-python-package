@@ -30,8 +30,14 @@ dependencies = []
 dynamic = ["version", "description"]
 
 [project.optional-dependencies]
-tests = [
-    "pytest"
+dev = [
+    "autoflake",
+    "black",
+    "flake8",
+    "isort",
+    "mypy",
+    "pre-commit",
+    "pyupgrade",
 ]
 docs = [
     "furo",
@@ -40,15 +46,8 @@ docs = [
     "sphinx-copybutton",
     "sphinxext-opengraph"
 ]
-dev = [
-    "{{ cookiecutter.project_name }}[tests,docs]",
-    "autoflake",
-    "black",
-    "flake8",
-    "isort",
-    "mypy",
-    "pre-commit",
-    "pyupgrade",
+tests = [
+    "pytest"
 ]
 
 [project.urls]
