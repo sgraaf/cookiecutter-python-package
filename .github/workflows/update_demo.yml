@@ -1,0 +1,54 @@
+name: Update Demo
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TEMPLATE: cookiecutter-python-package
+  CURRENT_DEMO: cookiecutter-python-package-demo-current
+  DEMO: cookiecutter-python-package-demo
+
+jobs:
+  update_demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ env.TEMPLATE }}
+        uses: actions/checkout@v3
+        with:
+          path: ${{ env.TEMPLATE }}
+
+      - name: Checkout ${{ env.DEMO }}
+        uses: actions/checkout@v3
+        with:
+          repository: "sgraaf/${{ env.DEMO }}"
+          path: ${{ env.CURRENT_DEMO }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN_FOR_PUSH }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install cookiecutter
+
+      - name: Build Demo
+        run: |
+          cat "${{ env.TEMPLATE }}/.github/workflows/input-for-demo.txt" | cookiecutter "${{ env.TEMPLATE }}"
+          find "${{ env.DEMO }}"
+
+      - name: Configure Git
+        run: |
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+
+      - name: Commit and push changes
+        run: |
+          mv "${{ env.CURRENT_DEMO }}/.git" "${{ env.DEMO }}"
+          cd "${{ env.DEMO }}"
+          git add -A
+          git commit -m "Demo of ${{ env.TEMPLATE }}@${GITHUB_SHA}" || exit 0
+          git push

@@ -1,0 +1,13 @@
+cookiecutter-python-package-demo
+
+
+Demo of https://github.com/sgraaf/cookiecutter-python-package
+Steven van de Graaf
+steven@vandegraaf.xyz
+sgraaf
+
+
+
+4
+2
+2
