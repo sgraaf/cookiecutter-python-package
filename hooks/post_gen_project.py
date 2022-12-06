@@ -15,7 +15,7 @@ if "{{ cookiecutter.init_venv }}" == "True":
         venv_executable = r".venv/bin/python"
     else:
         venv_executable = r".venv\Scripts\python"
-    subprocess.run([venv_executable, "-m", "pip", "install", "--upgrade", "pip", "setuptools", "flit"])
+    subprocess.run([venv_executable, "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel", "flit"])
     # install dependencies
     subprocess.run([venv_executable, "-m", "flit", "install", "--symlink"])
     # install pre-commit hooks
