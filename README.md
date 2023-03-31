@@ -1,7 +1,7 @@
 # cookiecutter-python-package
 
 [![Supported Python Versions](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9%20|%203.10%20|%203.11-blue)](https://github.com/OutdoorXL/cookiecutter-python)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
@@ -18,9 +18,8 @@ cookiecutter gh:sgraaf/cookiecutter-python-package
 
 ## Features
 
--   Code formatting with [isort](https://pycqa.github.io/isort/), [Black](https://black.readthedocs.io/en/stable/) and [Prettier](https://prettier.io/)
--   Automated Python syntax upgrades with [pyupgrade](https://github.com/asottile/pyupgrade)
--   Linting with [Flake8](https://flake8.pycqa.org/en/stable/)
+-   Linting with autofix (i.e. removing unused imports, formatting and Python syntax upgrades) with [ruff](https://beta.ruff.rs/docs/)
+-   Code formatting with [Black](https://black.readthedocs.io/en/stable/) and [Prettier](https://prettier.io/)
 -   Static type-checking with [mypy](http://www.mypy-lang.org/)
 -   Testing with [pytest](https://docs.pytest.org/en/stable/index.html)
 -   Continuous Integration with [GitHub Actions](https://github.com/features/actions)
