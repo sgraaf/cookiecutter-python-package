@@ -1,6 +1,6 @@
 # cookiecutter-python-package
 
-[![Supported Python Versions](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11-blue)](https://github.com/sgraaf/cookiecutter-python-package)
+[![Supported Python Versions](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11%20|%203.12-blue)](https://github.com/sgraaf/cookiecutter-python-package)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)](https://github.com/charliermarsh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
@@ -26,4 +26,4 @@ cookiecutter gh:sgraaf/cookiecutter-python-package
 -   Documentation with [Sphinx](https://www.sphinx-doc.org/en/master/), [MyST](https://myst-parser.readthedocs.io/en/latest/), and [Read the Docs](https://readthedocs.org/) using the [Furo](https://pradyunsg.me/furo/) theme
 -   Automated release builds and uploads to [PyPI](https://pypi.org/)
 
-This template supports Python 3.8, 3.9, 3.10 and 3.11.
+This template supports Python 3.8, 3.9, 3.10, 3.11 and 3.12.
