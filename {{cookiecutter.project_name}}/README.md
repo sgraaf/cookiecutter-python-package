@@ -9,7 +9,7 @@
 [![Documentation Status](https://readthedocs.org/projects/{{cookiecutter.project_name}}/badge/?version=latest)](https://{{cookiecutter.project_name}}.readthedocs.io/en/latest/?badge=latest)
 [![PyPI - License](https://img.shields.io/pypi/l/{{cookiecutter.project_name}})](https://img.shields.io/pypi/l/{{cookiecutter.project_name}})
 
-{{ cookiecutter.description }}
+{{ cookiecutter.short_description }}
 
 <!-- end docs-include-index -->
 
