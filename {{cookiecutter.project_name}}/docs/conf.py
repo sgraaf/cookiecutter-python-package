@@ -20,6 +20,7 @@ extensions = [
     "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.autodoc.typehints",
+    "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
@@ -29,8 +30,9 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-# auto-generate header anchors
+# auto-generate header anchors and suppress header warnings
 myst_heading_anchors = 3
+suppress_warnings = ["myst.header"]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
