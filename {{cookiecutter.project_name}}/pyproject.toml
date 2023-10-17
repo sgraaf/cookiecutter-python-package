@@ -10,12 +10,20 @@ license = {file = "LICENSE"}
 keywords = []
 classifiers = [
     "{{cookiecutter.development_status}}",
-    {% if cookiecutter.license == 'MIT' -%}
+    {% if cookiecutter.license == 'mit' -%}
     "License :: OSI Approved :: MIT License",
-    {% elif cookiecutter.license == 'Apache-2.0' -%}
-    "License :: OSI Approved :: Apache Software License",
-    {% elif cookiecutter.license == 'GPL-3.0' -%}
+    {% elif cookiecutter.license == 'gpl-3.0' -%}
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    {% elif cookiecutter.license == 'apache-2.0' -%}
+    "License :: OSI Approved :: Apache Software License",
+    {% elif cookiecutter.license == 'gpl-2.0' -%}
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    {% elif cookiecutter.license == 'bsd-3-clause' -%}
+    "License :: OSI Approved :: BSD License",
+    {% elif cookiecutter.license == 'agpl-3.0' -%}
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    {% elif cookiecutter.license == 'unlicense' -%}
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
     {% endif -%}
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",

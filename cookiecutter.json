@@ -8,7 +8,15 @@
     "github_username": "",
     "version": "0.1.0",
     "copyright_year": "{% now 'utc', '%Y' %}",
-    "license": ["MIT", "Apache-2.0", "GPL-3.0"],
+    "license": [
+        "mit",
+        "gpl-3.0",
+        "apache-2.0",
+        "gpl-2.0",
+        "bsd-3-clause",
+        "agpl-3.0",
+        "unlicense"
+    ],
     "development_status": [
         "Development Status :: 1 - Planning",
         "Development Status :: 2 - Pre-Alpha",
