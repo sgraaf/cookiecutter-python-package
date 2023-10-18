@@ -23,8 +23,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: "sgraaf/${{ env.DEMO }}"
-          path: ${{ env.CURRENT_DEMO }}
           token: ${{ secrets.X_GITHUB_PAT }}
+          path: ${{ env.CURRENT_DEMO }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
