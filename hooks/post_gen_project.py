@@ -13,42 +13,52 @@ def possibly_install_pipx() -> None:
         subprocess.run([sys.executable, "-m", "pipx", "ensurepath"], check=False)
 
 
+# possibly install nox (and pipx)
+if shutil.which("nox") is None:
+    # possibly install pipx
+    possibly_install_pipx()
+
+    # install nox
+    subprocess.run([sys.executable, "-m", "pipx", "install", "nox"], check=False)
+
+# possibly install pre-commit (and pipx)
+if shutil.which("pre-commit") is None:
+    # possibly install pipx
+    possibly_install_pipx()
+
+    # install pre-commit
+    subprocess.run([sys.executable, "-m", "pipx", "install", "pre-commit"], check=False)
+
 # perform git initialization
 if "{{ cookiecutter.init_git }}" == "True":
     # initialize Git repository
     subprocess.run(["git", "init", "-b", "main"], check=False)
 
-    # possibly install pre-commit (and pipx)
-    if shutil.which("pre-commit") is None:
-        # possibly install pipx
-        possibly_install_pipx()
-
-        # install pre-commit
-        subprocess.run(
-            [sys.executable, "-m", "pipx", "install", "pre-commit"], check=False
-        )
-
-    # install and update pre-commit hooks
-    subprocess.run(["pre-commit", "install"], check=False)
+    # update and install pre-commit hooks
     subprocess.run(["pre-commit", "autoupdate"], check=False)
     subprocess.run(["pre-commit", "install", "--install-hooks"], check=False)
 
-    # add and commit
+    # add files
     subprocess.run(["git", "add", "."], check=False)
+
+    # run nox "cog" and "pre_commit" sessions
+    subprocess.run(["nox", "--session", "cog", "pre_commit"], check=False)
+
+    # possibly re-add files
+    subprocess.run(["git", "add", "."], check=False)
+
+    # commit
     subprocess.run(
-        ["git", "commit", "-m", "🍪 Initial commit from `cookiecutter-python-package`"],
+        [
+            "git",
+            "commit",
+            "-m",
+            ":cookie: Initial commit from `cookiecutter-python-package`",
+        ],
         check=False,
     )
 
 # create venv and install dependencies
 if "{{ cookiecutter.init_venv }}" == "True":
-    # possibly install nox (and pipx)
-    if shutil.which("nox") is None:
-        # possibly install pipx
-        possibly_install_pipx()
-
-        # install nox
-        subprocess.run([sys.executable, "-m", "pipx", "install", "nox"], check=False)
-
     # run nox "dev" session
     subprocess.run(["nox", "--session", "dev"], check=False)
