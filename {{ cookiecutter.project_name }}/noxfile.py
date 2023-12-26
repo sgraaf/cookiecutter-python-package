@@ -27,10 +27,11 @@ ALL_PYTHON_VERSIONS = [
 # rtd = yaml.safe_load(open(".readthedocs.yaml"))
 # cog.outl(f'DOCS_PYTHON_VERSION = "{rtd["build"]["tools"]["python"]}"')
 # ]]]
-DOCS_PYTHON_VERSION = "3.11"
+DOCS_PYTHON_VERSION = "3.12"
 # [[[end]]]
 
-VENV_DIR = Path(".venv").resolve()
+ROOT_DIR = Path(__file__).resolve().parent
+VENV_DIR = ROOT_DIR / ".venv"
 
 
 @nox.session
@@ -43,7 +44,7 @@ def dev(session: nox.Session) -> None:
     session.run(
         "virtualenv",
         "--prompt",
-        "{{cookiecutter.project_name}}",
+        "{{ cookiecutter.project_name }}",
         str(VENV_DIR),
         silent=True,
     )
@@ -84,7 +85,7 @@ def dev(session: nox.Session) -> None:
 @nox.session
 def cog(session: nox.Session) -> None:
     """Run cog."""
-    session.install("cogapp", "PyYAML")
+    session.install("cogapp", "PyYAML", ".")
     session.run("cog", *session.posargs, "-r", "noxfile.py")
 
 
@@ -92,7 +93,7 @@ def cog(session: nox.Session) -> None:
 def pre_commit(session: nox.Session) -> None:
     """Run pre-commit hooks."""
     session.install("pre-commit")
-    session.run("pre-commit", "run", "--all-files")
+    session.run("pre-commit", "run", *session.posargs, "--all-files")
 
 
 @nox.session(python=ALL_PYTHON_VERSIONS, tags=["tests"])

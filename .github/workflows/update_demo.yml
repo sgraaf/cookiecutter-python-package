@@ -26,19 +26,15 @@ jobs:
           token: ${{ secrets.X_GITHUB_PAT }}
           path: ${{ env.CURRENT_DEMO }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           cache: pip
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install -r "${{ env.TEMPLATE }}/requirements.txt"
 
       - name: Build Demo
         run: |
-          cat "${{ env.TEMPLATE }}/.github/workflows/input-for-demo.txt" | cookiecutter "${{ env.TEMPLATE }}"
+          cat "${{ env.TEMPLATE }}/.github/workflows/input-for-demo.txt" | pipx run cookiecutter "${{ env.TEMPLATE }}"
           find "${{ env.DEMO }}"
 
       - name: Commit and push changes

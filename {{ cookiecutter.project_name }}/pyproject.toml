@@ -9,7 +9,7 @@ readme = "README.md"
 license = {file = "LICENSE"}
 keywords = []
 classifiers = [
-    "{{cookiecutter.development_status}}",
+    "{{ cookiecutter.development_status }}",
     {% if cookiecutter.license == 'mit' -%}
     "License :: OSI Approved :: MIT License",
     {% elif cookiecutter.license == 'gpl-3.0' -%}
@@ -41,7 +41,7 @@ dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 tests = [
-    "pytest"
+    "pytest",
 ]
 docs = [
     "furo",
@@ -76,6 +76,7 @@ ignore = [
     "E501",  # line too long, handled by black
     "COM",  # flake8-commas, handled by black
     "CPY",  # flake8-copyright
+    "ISC001",  # single-line-implicit-string-concatenation
     "INP",  # flake8-no-pep420
 ]
 src = ["src", "tests", "docs"]
