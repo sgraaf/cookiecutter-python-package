@@ -19,8 +19,10 @@ cookiecutter gh:sgraaf/cookiecutter-python-package
 
 ## Features
 
+<!-- TODO: mention optional choice of licenses, git and venv initialization -->
+
 -   Linting with autofix (i.e. removing unused imports, formatting and Python syntax upgrades) with [ruff](https://beta.ruff.rs/docs/)
--   Code formatting with [Black](https://black.readthedocs.io/en/stable/) and [Prettier](https://prettier.io/)
+-   Code formatting with [ruff](https://beta.ruff.rs/docs/) and [Prettier](https://prettier.io/)
 -   Static type-checking with [mypy](http://www.mypy-lang.org/)
 -   Checks and fixes before every commit with [pre-commit](https://pre-commit.com/)
 -   Testing with [pytest](https://docs.pytest.org/en/stable/index.html)
