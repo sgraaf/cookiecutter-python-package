@@ -1,7 +1,7 @@
 {
-    "project_name": "python-project",
+    "friendly_name": "Python Package",
+    "project_name": "{{ cookiecutter.friendly_name | slugify }}",
     "package_name": "{{ cookiecutter.project_name.replace('-', '_').lower() }}",
-    "friendly_name": "{{ cookiecutter.project_name.replace('-', ' ').title() }}",
     "short_description": "{{ cookiecutter.friendly_name }} is a Python package for ...",
     "author": "",
     "email": "",
@@ -29,9 +29,9 @@
     "init_git": [true, false],
     "init_venv": [true, false],
     "__prompts__": {
+        "friendly_name": "The friendly name of your project (for use in documentation, etc.)",
         "project_name": "The name (slug) of your project",
         "package_name": "The name of your package",
-        "friendly_name": "The friendly name of your project (for use in documentation, etc.)",
         "short_description": "A short description of your projec",
         "author": "Your (full) name",
         "email": "Your e-mail address",
