@@ -1,9 +1,10 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "{{ cookiecutter.project_name }}"
+description = "{{ cookiecutter.short_description }}"
 authors = [{name = "{{ cookiecutter.author }}", email = "{{ cookiecutter.email }}"}]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -27,17 +28,17 @@ classifiers = [
     {% endif -%}
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     "Typing :: Typed",
 ]
-requires-python = "~=3.8"
+requires-python = "~=3.9"
 dependencies = []
-dynamic = ["version", "description"]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 tests = [
@@ -61,18 +62,14 @@ Changelog = "https://{{ cookiecutter.project_name }}.readthedocs.io/en/stable/ch
 "Source Code" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_name }}"
 "Issue Tracker" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_name }}/issues"
 
-{% if cookiecutter.package_name != cookiecutter.project_name.replace('-', '_') -%}
-[tool.flit.module]
-name = "{{ cookiecutter.package_name }}"
-{% endif -%}
+[tool.setuptools.dynamic]
+version = {attr = "{{ cookiecutter.package_name }}.__version__"}
 
 [tool.ruff]
 lint.select = ["ALL"]
 lint.ignore = [
     "E501",  # line too long (pycodestyle), handled by ruff-format
     "ANN003",  # missing-type-kwargs (flake8-annotations)
-    "ANN101",  # missing-type-self (flake8-annotations)
-    "ANN102",  # missing-type-cls (flake8-annotations)
     "ANN401",  # any-type (flake8-annotations)
     "COM",  # flake8-commas, handled by ruff-format
     "CPY",  # flake8-copyright
@@ -80,7 +77,7 @@ lint.ignore = [
     "INP",  # flake8-no-pep420
 ]
 src = ["src", "tests", "docs"]
-target-version = "py38"  # the minimum Python version supported, used by pyupgrade
+target-version = "py39"  # the minimum Python version supported, used by pyupgrade
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = [

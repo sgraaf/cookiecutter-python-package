@@ -1,10 +1,10 @@
-import os
 from pathlib import Path
 from shutil import rmtree
 
 import nox
 
-nox.options.sessions = ["pre_commit", "tests", "docs"]
+nox.options.sessions = ["pre-commit", "tests", "docs"]
+nox.options.default_venv_backend = "uv|virtualenv"
 nox.options.reuse_existing_virtualenvs = True
 nox.options.error_on_external_run = True
 
@@ -15,11 +15,11 @@ ALL_PYTHON_VERSIONS = [
     #     if (match := re.search(r"Programming Language :: Python :: (?P<version>3\.\d+)", line)) is not None:
     #         cog.outl(f'"{match.group("version")}",')
     # ]]]
-    "3.8",
     "3.9",
     "3.10",
     "3.11",
     "3.12",
+    "3.13",
     # [[[end]]]
 ]
 
@@ -28,7 +28,7 @@ ALL_PYTHON_VERSIONS = [
 # rtd = yaml.safe_load(open(".readthedocs.yaml"))
 # cog.outl(f'DOCS_PYTHON_VERSION = "{rtd["build"]["tools"]["python"]}"')
 # ]]]
-DOCS_PYTHON_VERSION = "3.12"
+DOCS_PYTHON_VERSION = "3.13"
 # [[[end]]]
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -42,49 +42,29 @@ PACKAGE_BUILD_DIR = ROOT_DIR / "build"
 PACKAGE_DIST_DIR = ROOT_DIR / "dist"
 
 
-@nox.session
+@nox.session(python=False)
 def dev(session: nox.Session) -> None:
     """Sets up a Python development environment for the project."""
-    # install `virtualenv` CLI tool into nox's "dev" virtual environment (venv)
-    session.install("virtualenv")
-
-    # initialize development environment (venv)
+    # create the development environment (venv)
     session.run(
-        "virtualenv",
+        "uv",
+        "venv",
+        "--seed",
         "--prompt",
         "{{ cookiecutter.project_name }}",
         str(VENV_DIR),
-        silent=True,
-    )
-
-    # determine venv executable
-    if os.name == "posix":
-        venv_executable = VENV_DIR / "bin" / "python"
-    else:
-        venv_executable = VENV_DIR / "Scripts" / "python.exe"
-
-    # upgrade pip, setuptools and wheel
-    session.run(
-        str(venv_executable),
-        "-m",
-        "pip",
-        "install",
-        "--upgrade",
-        "pip",
-        "setuptools",
-        "wheel",
         external=True,
         silent=True,
     )
 
     # install the current package in editable mode (along with its dependencies)
     session.run(
-        str(venv_executable),
-        "-m",
+        "uv",
         "pip",
         "install",
         "--editable",
         ".[dev]",
+        env={"VIRTUAL_ENV": str(VENV_DIR)},
         external=True,
         silent=True,
     )
@@ -99,10 +79,10 @@ def cog(session: nox.Session) -> None:
     for cog_input_file in cog_input_files:
         session.run("cog", *session.posargs, "-r", cog_input_file)
 
-    session.notify("pre_commit", ["trailing-whitespace", "--files", *cog_input_files])
+    session.notify("pre-commit", ["trailing-whitespace", "--files", *cog_input_files])
 
 
-@nox.session
+@nox.session(name="pre-commit")
 def pre_commit(session: nox.Session) -> None:
     """Run pre-commit hooks."""
     # fmt: off
@@ -110,7 +90,7 @@ def pre_commit(session: nox.Session) -> None:
         "--all-files",  # run on all the files in the repo.
     ]
     # fmt: on
-    session.install("pre-commit")
+    session.install("pre-commit-uv")
     session.run("pre-commit", "run", *args)
 
 
@@ -172,24 +152,21 @@ def clear_packages(session: nox.Session) -> None:  # noqa: ARG001
         rmtree(PACKAGE_DIST_DIR)
 
 
-@nox.session(name="build-package")
+@nox.session(name="build-package", python=False)
 def build_package(session: nox.Session) -> None:
     """Builds the package, both as a source distribution (sdist) and as a wheel."""
-    args = session.posargs or ["--outdir", PACKAGE_DIST_DIR, ROOT_DIR]
-    session.install("build")
-    session.run("python", "-m", "build", *args)
+    args = session.posargs or ["--out-dir", PACKAGE_DIST_DIR, ROOT_DIR]
+    session.run("uv", "build", *args)
 
 
 @nox.session(name="upload-package")
 def upload_package(session: nox.Session) -> None:
     """Builds the package, both as a source distribution (sdist) and as a wheel."""
-    session.install("twine")
-
     # check whether the package's long description will render correctly on PyPI
-    session.run("twine", "check", "--strict", f"{PACKAGE_DIST_DIR.as_posix()}/*")
+    session.run("uvx", "twine", "check", "--strict", f"{PACKAGE_DIST_DIR.as_posix()}/*")
 
     # upload the package(s) to (Test)PyPI
-    session.run("twine", "upload", *session.posargs, f"{PACKAGE_DIST_DIR.as_posix()}/*")
+    session.run("uv", "publish", *session.posargs, f"{PACKAGE_DIST_DIR.as_posix()}/*")
 
 
 @nox.session(name="release-to-testpypi", python=False)

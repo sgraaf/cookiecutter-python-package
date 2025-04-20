@@ -17,23 +17,10 @@
 
 <!-- start docs-include-installation -->
 
-### From PyPI
+{{ cookiecutter.friendly_name }} is available on [PyPI](https://pypi.org/project/{{ cookiecutter.project_name }}/). Install with [uv](https://docs.astral.sh/uv/) or your package manager of choice:
 
-{{ cookiecutter.friendly_name }} is available on [PyPI](https://pypi.org/project/{{ cookiecutter.project_name }}/). Install with `pip` or your package manager of choice:
-
-```bash
-pip install {{ cookiecutter.project_name }}
-```
-
-### From source
-
-If you'd like, you can also install {{ cookiecutter.friendly_name }} from source (with [`flit`](https://flit.readthedocs.io/en/latest/)):
-
-```bash
-git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_name }}.git
-cd {{ cookiecutter.project_name }}
-python3 -m pip install flit
-flit install
+```sh
+uv pip install {{ cookiecutter.project_name }}
 ```
 
 <!-- end docs-include-installation -->

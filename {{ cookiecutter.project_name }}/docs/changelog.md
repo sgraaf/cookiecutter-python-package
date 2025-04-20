@@ -4,4 +4,4 @@
 
 ### Changes
 
--   Initial release of {{ cookiecutter.friendly_name }}
+- Initial release of {{ cookiecutter.friendly_name }}

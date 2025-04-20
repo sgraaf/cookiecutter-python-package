@@ -13,23 +13,27 @@ def possibly_install_pipx() -> None:
         subprocess.run([sys.executable, "-m", "pipx", "ensurepath"], check=False)
 
 
-def possibly_install_nox() -> None:
-    if shutil.which("nox") is None:
+def possibly_install_uv() -> None:
+    if shutil.which("uv") is None:
         # possibly install pipx
         possibly_install_pipx()
 
+        # install uv
+        subprocess.run([sys.executable, "-m", "pipx", "install", "uv"], check=False)
+
+
+def possibly_install_nox() -> None:
+    if shutil.which("nox") is None:
         # install nox
-        subprocess.run([sys.executable, "-m", "pipx", "install", "nox"], check=False)
+        subprocess.run(["uv", "tool", "install", "nox[uv]"], check=False)
 
 
 def possibly_install_pre_commit() -> None:
     if shutil.which("pre-commit") is None:
-        # possibly install pipx
-        possibly_install_pipx()
-
         # install pre-commit
         subprocess.run(
-            [sys.executable, "-m", "pipx", "install", "pre-commit"], check=False
+            ["uv", "tool", "install", "pre-commit", "--with", "pre-commit-uv"],
+            check=False,
         )
 
 
@@ -44,8 +48,8 @@ def initialize_git_repository() -> None:
     # add files
     subprocess.run(["git", "add", "."], check=False)
 
-    # run nox "cog" and "pre_commit" sessions
-    subprocess.run(["nox", "--session", "cog", "pre_commit"], check=False)
+    # run nox "cog" and "pre-commit" sessions
+    subprocess.run(["nox", "--session", "cog", "pre-commit"], check=False)
 
     # possibly re-add files
     subprocess.run(["git", "add", "."], check=False)
@@ -68,9 +72,11 @@ def initialize_venv() -> None:
 
 
 if __name__ == "__main__":
-    # possibly install nox (and pipx)
+    # possibly install uv (and pipx)
+    possibly_install_uv()
+    # possibly install nox
     possibly_install_nox()
-    # possibly install pre-commit (and pipx)
+    # possibly install pre-commit
     possibly_install_pre_commit()
     # perform git initialization
     if "{{ cookiecutter.init_git }}" == "True":
