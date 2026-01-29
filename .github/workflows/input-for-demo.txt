@@ -1,4 +1,4 @@
-Cookiecutter Python Package Demo
+cookiecutter-python-package-demo
 
 
 Demo of https://github.com/sgraaf/cookiecutter-python-package.
@@ -9,5 +9,4 @@ sgraaf
 
 
 4
-2
 2

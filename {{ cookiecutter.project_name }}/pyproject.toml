@@ -1,9 +1,10 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.9.11,<0.10.0"]
+build-backend = "uv_build"
 
 [project]
 name = "{{ cookiecutter.project_name }}"
+version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.short_description }}"
 authors = [{name = "{{ cookiecutter.author }}", email = "{{ cookiecutter.email }}"}]
 readme = "README.md"
@@ -11,39 +12,38 @@ license = {file = "LICENSE"}
 keywords = []
 classifiers = [
     "{{ cookiecutter.development_status }}",
-    {% if cookiecutter.license == 'mit' -%}
-    "License :: OSI Approved :: MIT License",
+    {% if cookiecutter.license == 'agpl-3.0' -%}
+    "License :: OSI Approved :: GNU Affero General Public License v3",
     {% elif cookiecutter.license == 'gpl-3.0' -%}
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    {% elif cookiecutter.license == 'lgpl-3.0' -%}
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    {% elif cookiecutter.license == 'mpl-2.0' -%}
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     {% elif cookiecutter.license == 'apache-2.0' -%}
     "License :: OSI Approved :: Apache Software License",
-    {% elif cookiecutter.license == 'gpl-2.0' -%}
-    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
-    {% elif cookiecutter.license == 'bsd-3-clause' -%}
-    "License :: OSI Approved :: BSD License",
-    {% elif cookiecutter.license == 'agpl-3.0' -%}
-    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    {% elif cookiecutter.license == 'mit' -%}
+    "License :: OSI Approved :: MIT License",
     {% elif cookiecutter.license == 'unlicense' -%}
     "License :: OSI Approved :: The Unlicense (Unlicense)",
+    {% elif cookiecutter.license == 'bsd-3-clause' -%}
+    "License :: OSI Approved :: BSD License",
+    {% elif cookiecutter.license == 'gpl-2.0' -%}
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
     {% endif -%}
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.14",
     "Typing :: Typed",
 ]
-requires-python = "~=3.9"
+requires-python = ">=3.10, <4"
 dependencies = []
-dynamic = ["version"]
 
-[project.optional-dependencies]
-tests = [
-    "pytest",
-]
+[dependency-groups]
 docs = [
     "furo",
     "myst-parser",
@@ -52,8 +52,20 @@ docs = [
     "sphinx-copybutton",
     "sphinxext-opengraph",
 ]
+tests = [
+    "pytest",
+    "pytest-cov",
+]
+typing = [
+    "mypy",
+    "pyrefly",
+    "ty",
+]
 dev = [
-    "{{ cookiecutter.project_name }}[tests,docs]",
+    { include-group = "docs" },
+    { include-group = "tests" },
+    { include-group = "typing" },
+    "prek",
 ]
 
 [project.urls]
@@ -62,48 +74,34 @@ Changelog = "https://{{ cookiecutter.project_name }}.readthedocs.io/en/stable/ch
 "Source Code" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_name }}"
 "Issue Tracker" = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_name }}/issues"
 
-[tool.setuptools.dynamic]
-version = {attr = "{{ cookiecutter.package_name }}.__version__"}
-
-[tool.ruff]
-lint.select = ["ALL"]
-lint.ignore = [
-    "E501",  # line too long (pycodestyle), handled by ruff-format
-    "ANN003",  # missing-type-kwargs (flake8-annotations)
-    "ANN401",  # any-type (flake8-annotations)
-    "COM",  # flake8-commas, handled by ruff-format
-    "CPY",  # flake8-copyright
-    "ISC001",  # single-line-implicit-string-concatenation (flake8-implicit-str-concat)
-    "INP",  # flake8-no-pep420
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812",  # missing-trailing-comma (flake8-commas), handled by the formatter
+    "D102",  # undocumented-public-method (pydocstyle)
+    "D105",  # undocumented-magic-method (pydocstyle)
+    "D107",  # undocumented-public-init (pydocstyle)
+    "E501",  # line-too-long (pycodestyle), handled by the formatter
+    "PLC2401",  # non-ascii-name (Pylint)
+    "S101",   # assert (flake8-bandit)
+    "S314",  # suspicious-xml-element-tree-usage (flake8-bandit)
+    "SLF001",  # private-member-access (flake8-self)
 ]
-src = ["src", "tests", "docs"]
-target-version = "py39"  # the minimum Python version supported, used by pyupgrade
+pydocstyle.convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = [
     "F401",  # unused-import (Pyflakes)
 ]
+"docs/conf.py" = [
+    "INP001",  # implicit-namespace-package (flake8-no-pep420)
+]
 "tests/**/test_*.py" = [
     "D",  # pydocstyle
-    "ANN201",  # missing-return-type-undocumented-public-function (flake8-annotations)
+    "PLR2004",   # magic-value-comparison (Pylint)
     "S101",   # assert (flake8-bandit)
     "SIM300",   # yoda-conditions (flake8-simplify)
-    "PLR2004",   # magic-value-comparison (Pylint)
-]
-"docs/conf.py" = [
-    "A001",  # builtin-variable-shadowing (flake8-builtins)
-]
-"noxfile.py" = [
-    "D100",  # undocumented-public-module (pydocstyle)
-    "ERA001",  # commented-out-code (eradicate)
 ]
 
-[tool.ruff.lint.isort]
-known-first-party = [
-  "{{ cookiecutter.project_name }}",
-  "tests",
-]
-lines-between-types = 0
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
+[tool.mypy]
+python_version = "3.10"

@@ -1,21 +1,19 @@
 """Sphinx configuration."""
 
-from __future__ import annotations
-
-import sys
-from pathlib import Path
+from importlib import metadata
 from typing import Any
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import {{ cookiecutter.package_name }}
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "{{ cookiecutter.friendly_name }}"
-copyright = "{{ cookiecutter.copyright_year }}, {{ cookiecutter.author }}"
 author = "{{ cookiecutter.author }}"
-release = {{ cookiecutter.package_name }}.__version__
+copyright = f"{{ cookiecutter.copyright_year }}, {author}"  # noqa: A001
+
+# The full version, including alpha/beta/rc tags.
+release = metadata.version("{{ cookiecutter.project_name }}")
+# The short X.Y version.
+version = release.rsplit(".", 1)[0]
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -43,6 +41,10 @@ intersphinx_mapping = {
 }
 
 # move type hints into the description block, instead of the signature
+autodoc_member_order = "bysource"
+autodoc_default_options = {
+    "show-inheritance": True,
+}
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 

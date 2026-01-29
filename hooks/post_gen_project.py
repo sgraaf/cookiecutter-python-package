@@ -22,19 +22,9 @@ def possibly_install_uv() -> None:
         subprocess.run([sys.executable, "-m", "pipx", "install", "uv"], check=False)
 
 
-def possibly_install_nox() -> None:
-    if shutil.which("nox") is None:
-        # install nox
-        subprocess.run(["uv", "tool", "install", "nox[uv]"], check=False)
-
-
-def possibly_install_pre_commit() -> None:
-    if shutil.which("pre-commit") is None:
-        # install pre-commit
-        subprocess.run(
-            ["uv", "tool", "install", "pre-commit", "--with", "pre-commit-uv"],
-            check=False,
-        )
+def initialize_venv() -> None:
+    # create virtual environment and install dependencies
+    subprocess.run(["uv", "sync", "--dev"], check=False)
 
 
 def initialize_git_repository() -> None:
@@ -42,14 +32,14 @@ def initialize_git_repository() -> None:
     subprocess.run(["git", "init", "-b", "main"], check=False)
 
     # update and install pre-commit hooks
-    subprocess.run(["pre-commit", "autoupdate"], check=False)
-    subprocess.run(["pre-commit", "install", "--install-hooks"], check=False)
+    subprocess.run(["prek", "auto-update"], check=False)
+    subprocess.run(["prek", "install", "--install-hooks"], check=False)
 
     # add files
     subprocess.run(["git", "add", "."], check=False)
 
-    # run nox "cog" and "pre-commit" sessions
-    subprocess.run(["nox", "--session", "cog", "pre-commit"], check=False)
+    # run nox "cog" and "prek" sessions
+    subprocess.run(["prek", "run", "--all-files"], check=False)
 
     # possibly re-add files
     subprocess.run(["git", "add", "."], check=False)
@@ -60,27 +50,17 @@ def initialize_git_repository() -> None:
             "git",
             "commit",
             "-m",
-            ":cookie: Initial commit from `cookiecutter-python-package`",
+            "Initial commit from `cookiecutter-python-package`",
         ],
         check=False,
     )
 
 
-def initialize_venv() -> None:
-    # run nox "dev" session
-    subprocess.run(["nox", "--session", "dev"], check=False)
-
-
 if __name__ == "__main__":
     # possibly install uv (and pipx)
     possibly_install_uv()
-    # possibly install nox
-    possibly_install_nox()
-    # possibly install pre-commit
-    possibly_install_pre_commit()
+    # create venv and install dependencies
+    initialize_venv()
     # perform git initialization
     if "{{ cookiecutter.init_git }}" == "True":
         initialize_git_repository()
-    # create venv and install dependencies
-    if "{{ cookiecutter.init_venv }}" == "True":
-        initialize_venv()
