@@ -21,8 +21,8 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
-      - name: Install Python 3.13
-        run: uv python install 3.13
+      - name: Install Python 3.{{ [cookiecutter.min_python_version.split('.')[1] | int, 13] | max }}
+        run: uv python install 3.{{ [cookiecutter.min_python_version.split('.')[1] | int, 13] | max }}
 
       - name: Build
         run: uv build

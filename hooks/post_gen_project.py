@@ -1,16 +1,17 @@
 import shutil
 import subprocess
 import sys
+from functools import partial
+
+run = partial(subprocess.run, check=False)
 
 
 def possibly_install_pipx() -> None:
     if shutil.which("pipx") is None:
         # install pipx
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "--user", "pipx"], check=False
-        )
+        run([sys.executable, "-m", "pip", "install", "--user", "pipx"])
         # add pipx to PATH
-        subprocess.run([sys.executable, "-m", "pipx", "ensurepath"], check=False)
+        run([sys.executable, "-m", "pipx", "ensurepath"])
 
 
 def possibly_install_uv() -> None:
@@ -19,40 +20,39 @@ def possibly_install_uv() -> None:
         possibly_install_pipx()
 
         # install uv
-        subprocess.run([sys.executable, "-m", "pipx", "install", "uv"], check=False)
+        run([sys.executable, "-m", "pipx", "install", "uv"])
 
 
 def initialize_venv() -> None:
     # create virtual environment and install dependencies
-    subprocess.run(["uv", "sync", "--dev"], check=False)
+    run(["uv", "sync", "--dev"])
 
 
 def initialize_git_repository() -> None:
     # initialize Git repository
-    subprocess.run(["git", "init", "-b", "main"], check=False)
+    run(["git", "init", "-b", "main"])
 
     # update and install pre-commit hooks
-    subprocess.run(["prek", "auto-update"], check=False)
-    subprocess.run(["prek", "install", "--install-hooks"], check=False)
+    run(["uv", "run", "prek", "auto-update"])
+    run(["uv", "run", "prek", "install", "--install-hooks"])
 
     # add files
-    subprocess.run(["git", "add", "."], check=False)
+    run(["git", "add", "."])
 
     # run nox "cog" and "prek" sessions
-    subprocess.run(["prek", "run", "--all-files"], check=False)
+    run(["uv", "run", "prek", "run", "--all-files"])
 
     # possibly re-add files
-    subprocess.run(["git", "add", "."], check=False)
+    run(["git", "add", "."])
 
     # commit
-    subprocess.run(
+    run(
         [
             "git",
             "commit",
             "-m",
             "Initial commit from `cookiecutter-python-package`",
         ],
-        check=False,
     )
 
 

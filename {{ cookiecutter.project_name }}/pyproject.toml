@@ -33,14 +33,12 @@ classifiers = [
     {% endif -%}
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
+    {% for minor in range(cookiecutter.min_python_version.split('.')[1] | int, 15) -%}
+    "Programming Language :: Python :: 3.{{ minor }}",
+    {% endfor -%}
     "Typing :: Typed",
 ]
-requires-python = ">=3.10, <4"
+requires-python = ">={{ cookiecutter.min_python_version }}, <4"
 dependencies = []
 
 [dependency-groups]
@@ -84,7 +82,6 @@ ignore = [
     "E501",  # line-too-long (pycodestyle), handled by the formatter
     "PLC2401",  # non-ascii-name (Pylint)
     "S101",   # assert (flake8-bandit)
-    "S314",  # suspicious-xml-element-tree-usage (flake8-bandit)
     "SLF001",  # private-member-access (flake8-self)
 ]
 pydocstyle.convention = "google"
@@ -104,4 +101,4 @@ pydocstyle.convention = "google"
 ]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "{{ cookiecutter.min_python_version }}"
