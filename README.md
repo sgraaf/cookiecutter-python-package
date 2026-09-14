@@ -22,7 +22,7 @@ cookiecutter gh:sgraaf/cookiecutter-python-package
 
 - Linting with autofix (i.e. removing unused imports, detecting code smells and Python syntax upgrades) with [Ruff](https://docs.astral.sh/ruff/)
 - Code formatting with [Ruff](https://docs.astral.sh/ruff/), [Mdformat](https://mdformat.readthedocs.io/en/stable/) and [Prettier](https://prettier.io/)
-- Static type-checking with [mypy](http://www.mypy-lang.org/), [Pyrefly](https://pyrefly.org/) and [ty](https://docs.astral.sh/ty/)
+- Static type-checking [ty](https://docs.astral.sh/ty/) for the entire project, and with [mypy](http://www.mypy-lang.org/), [Pyrefly](https://pyrefly.org/), [Pyright](https://microsoft.github.io/pyright/#/) and [Zuban](https://zubanls.com/) for the public API (i.e., the test suite)
 - Checks and fixes before every commit with [prek](https://prek.j178.dev/)
 - Testing with [pytest](https://docs.pytest.org/en/stable/)
 - Extremely fast Python package and project management with [uv](https://docs.astral.sh/uv/)

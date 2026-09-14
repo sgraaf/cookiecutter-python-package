@@ -1,5 +1,5 @@
 [build-system]
-requires = ["uv_build>=0.9.11,<0.10.0"]
+requires = ["uv_build>=0.12.13,<0.13"]
 build-backend = "uv_build"
 
 [project]
@@ -8,29 +8,29 @@ version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.short_description }}"
 authors = [{name = "{{ cookiecutter.author }}", email = "{{ cookiecutter.email }}"}]
 readme = "README.md"
-license = {file = "LICENSE"}
+{% if cookiecutter.license == 'agpl-3.0' -%}
+license = "AGPL-3.0-only"
+{% elif cookiecutter.license == 'gpl-3.0' -%}
+license = "GPL-3.0-only"
+{% elif cookiecutter.license == 'lgpl-3.0' -%}
+license = "LGPL-3.0-only"
+{% elif cookiecutter.license == 'mpl-2.0' -%}
+license = "MPL-2.0"
+{% elif cookiecutter.license == 'apache-2.0' -%}
+license = "Apache-2.0"
+{% elif cookiecutter.license == 'mit' -%}
+license = "MIT"
+{% elif cookiecutter.license == 'unlicense' -%}
+license = "Unlicense"
+{% elif cookiecutter.license == 'bsd-3-clause' -%}
+license = "BSD-3-Clause"
+{% elif cookiecutter.license == 'gpl-2.0' -%}
+license = "GPL-2.0-only"
+{% endif -%}
+license-files = ["LICENSE"]
 keywords = []
 classifiers = [
     "{{ cookiecutter.development_status }}",
-    {% if cookiecutter.license == 'agpl-3.0' -%}
-    "License :: OSI Approved :: GNU Affero General Public License v3",
-    {% elif cookiecutter.license == 'gpl-3.0' -%}
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-    {% elif cookiecutter.license == 'lgpl-3.0' -%}
-    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
-    {% elif cookiecutter.license == 'mpl-2.0' -%}
-    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
-    {% elif cookiecutter.license == 'apache-2.0' -%}
-    "License :: OSI Approved :: Apache Software License",
-    {% elif cookiecutter.license == 'mit' -%}
-    "License :: OSI Approved :: MIT License",
-    {% elif cookiecutter.license == 'unlicense' -%}
-    "License :: OSI Approved :: The Unlicense (Unlicense)",
-    {% elif cookiecutter.license == 'bsd-3-clause' -%}
-    "License :: OSI Approved :: BSD License",
-    {% elif cookiecutter.license == 'gpl-2.0' -%}
-    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
-    {% endif -%}
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     {% for minor in range(cookiecutter.min_python_version.split('.')[1] | int, 15) -%}
@@ -57,7 +57,9 @@ tests = [
 typing = [
     "mypy",
     "pyrefly",
+    "pyright[nodejs]",
     "ty",
+    "zuban",
 ]
 dev = [
     { include-group = "docs" },
@@ -76,6 +78,7 @@ Changelog = "https://{{ cookiecutter.project_name }}.readthedocs.io/en/stable/ch
 select = ["ALL"]
 ignore = [
     "COM812",  # missing-trailing-comma (flake8-commas), handled by the formatter
+    "CPY001",  # missing-copyright-notice (flake8-copyright)
     "D102",  # undocumented-public-method (pydocstyle)
     "D105",  # undocumented-magic-method (pydocstyle)
     "D107",  # undocumented-public-init (pydocstyle)
@@ -99,6 +102,27 @@ pydocstyle.convention = "google"
     "S101",   # assert (flake8-bandit)
     "SIM300",   # yoda-conditions (flake8-simplify)
 ]
+"tests/smoke_test.py" = [
+    "D",  # pydocstyle
+    "PLR2004",   # magic-value-comparison (Pylint)
+    "S101",  # assert (flake8-bandit)
+]
+
+[tool.ty.src]
+include = ["src", "tests"]
 
 [tool.mypy]
 python_version = "{{ cookiecutter.min_python_version }}"
+files = ["tests"]
+
+[tool.pyrefly]
+project-includes = ["tests"]
+search-path = ["tests"]
+
+[tool.pyright]
+include = ["tests"]
+pythonVersion = "{{ cookiecutter.min_python_version }}"
+
+[tool.zuban]
+python_version = "{{ cookiecutter.min_python_version }}"
+files = ["tests"]
