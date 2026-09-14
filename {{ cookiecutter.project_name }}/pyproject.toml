@@ -8,25 +8,7 @@ version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.short_description }}"
 authors = [{name = "{{ cookiecutter.author }}", email = "{{ cookiecutter.email }}"}]
 readme = "README.md"
-{% if cookiecutter.license == 'agpl-3.0' -%}
-license = "AGPL-3.0-only"
-{% elif cookiecutter.license == 'gpl-3.0' -%}
-license = "GPL-3.0-only"
-{% elif cookiecutter.license == 'lgpl-3.0' -%}
-license = "LGPL-3.0-only"
-{% elif cookiecutter.license == 'mpl-2.0' -%}
-license = "MPL-2.0"
-{% elif cookiecutter.license == 'apache-2.0' -%}
-license = "Apache-2.0"
-{% elif cookiecutter.license == 'mit' -%}
-license = "MIT"
-{% elif cookiecutter.license == 'unlicense' -%}
-license = "Unlicense"
-{% elif cookiecutter.license == 'bsd-3-clause' -%}
-license = "BSD-3-Clause"
-{% elif cookiecutter.license == 'gpl-2.0' -%}
-license = "GPL-2.0-only"
-{% endif -%}
+license = "{{ cookiecutter.license }}"
 license-files = ["LICENSE"]
 keywords = []
 classifiers = [
