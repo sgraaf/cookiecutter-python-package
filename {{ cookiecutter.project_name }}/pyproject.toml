@@ -15,7 +15,7 @@ classifiers = [
     "{{ cookiecutter.development_status }}",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    {% for minor in range(cookiecutter.min_python_version.split('.')[1] | int, 15) -%}
+    {% for minor in range(cookiecutter.min_python_version.split('.')[1] | int, 16) -%}
     "Programming Language :: Python :: 3.{{ minor }}",
     {% endfor -%}
     "Typing :: Typed",
